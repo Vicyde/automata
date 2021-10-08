@@ -47,11 +47,9 @@ def main(argv):
 
     if len(argv) > 1:
         for arg in range(1, len(argv)):
-            print(argv)
             if argv[arg] == '-r':
                 arg += 1
                 rule = int(argv[arg])
-                print(rule)
             if argv[arg] == '-h':
                 arg += 1
                 height = int(argv[arg])
@@ -61,6 +59,7 @@ def main(argv):
 
     ruleset = generate_ruleset(rule)
 
+    print("Using rule %s:" % rule)
     for n in range(height):
         print_row(row, t="#")
         row = calculate_row(row, ruleset)
