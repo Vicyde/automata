@@ -2,6 +2,8 @@ import sys
 import argparse
 import math
 import pygame 
+import random 
+
 from pygame.locals import *
 
 from typing import Collection
@@ -35,6 +37,7 @@ class GuiApp:
                 self.pixel_size += 1
             elif event.key == pygame.K_KP_MINUS:
                 self.pixel_size -= 1 if self.pixel_size > 1 else 0
+               
 
     def on_draw(self):
         self.drawing_surface.fill(self.color_background)
@@ -116,6 +119,7 @@ def main(argv):
     parser.add_argument('--rows', type=int, help="Amount of rows to print", default=80)
     parser.add_argument('--cols', type=int, help="The width of each row", default=64)
     parser.add_argument('--gui', action='store_true', help="Print using graphics")
+    parser.add_argument('--random', action='store_true', help="Starting row will be randomized")
     args = parser.parse_args()
 
     rule = args.rule
@@ -123,7 +127,13 @@ def main(argv):
     width = args.cols
 
     col = [ 0 ] * width
-    col[math.floor(width/2)] = 1
+
+    if args.random:
+        for n in range(0, len(col)):
+            col[n] = random.randrange(0, 2)
+    else:
+        col[math.floor(width/2)] = 1
+
     row = []
 
     ruleset = generate_ruleset(rule)
