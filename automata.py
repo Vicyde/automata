@@ -160,6 +160,10 @@ def main(argv):
         print("Rule can't exceed 256.")
         exit(1)
 
+    if width < 1 or height < 1:
+        print("Number of rows and/or columns can not be smaller than 1.")
+        exit(1)
+
     col = [ 0 ] * width
 
     if args.random:
