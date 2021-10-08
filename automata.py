@@ -29,6 +29,12 @@ class GuiApp:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self.running = False
+        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_KP_PLUS:
+                self.pixel_size += 1
+            elif event.key == pygame.K_KP_MINUS:
+                self.pixel_size -= 1 if self.pixel_size > 1 else 0
 
     def on_draw(self):
         self.drawing_surface.fill(self.color_background)
