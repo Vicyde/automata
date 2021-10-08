@@ -2,20 +2,23 @@ import sys
 
 def print_row(row):
     for x in row:
-        if x == 1:
-            print("*", end ='')
-        else:
-            print("-", end='')
+        print("*" if x == 1 else "-", end='')
 
     print()
 
-def calculate_row(row, rule):
-    rule = "{:08b}".format(rule)
-    ruleset = []
-    newrow = []
 
+def generate_ruleset(rule):
+    rule = "{:08b}".format(rule)  
+    ruleset =  []
+  
     for n in range(8):
         ruleset.append(int(rule[7-n]))
+
+    return ruleset
+
+
+def calculate_row(row, ruleset):
+    newrow = []
 
     for x in range(len(row)):
         xl = 0 if x == 0 else row[x-1]             # if at the left edge, xl is 0. Else it is the value in x-1
@@ -27,6 +30,7 @@ def calculate_row(row, rule):
         newrow.append(ruleset[val])
 
     return newrow
+
 
 def main(argv):
     rule = 90
@@ -44,9 +48,11 @@ def main(argv):
     row = [ 0 ] * 64
     row[32] = 1
 
+    ruleset = generate_ruleset(rule)
+
     for n in range(height):
         print_row(row)
-        row = calculate_row(row, rule)
+        row = calculate_row(row, ruleset)
 
 
 if __name__ == '__main__':
