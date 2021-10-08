@@ -47,10 +47,10 @@ def calculate_row(row, ruleset):
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Shows an cellular automata.")
-    parser.add_argument('--rule', type=int, help="Rule to use", default=30)
-    parser.add_argument('--rows', type=int, help="Rows to show", default=80)
-    parser.add_argument('--cols', type=int, help="Width of the rows", default=64)
-    parser.add_argument('--gui', action='store_true')
+    parser.add_argument('--rule', type=int, help="Rule to use, using wolfram rulenumber", default=30)
+    parser.add_argument('--rows', type=int, help="Amount of rows to print", default=80)
+    parser.add_argument('--cols', type=int, help="The width of each row", default=64)
+    parser.add_argument('--gui', action='store_true', help="Print using graphics")
     args = parser.parse_args()
 
     rule = args.rule
