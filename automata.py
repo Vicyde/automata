@@ -26,7 +26,11 @@ class GuiApp:
         pygame.init()
         self.drawing_surface = pygame.display.set_mode(self.size, pygame.HWSURFACE)
         self.running = True
-        self.pixel_size = 1
+
+        self.pixel_size = math.floor(min(
+            self.size[0] / len(self.row[0]),
+            self.size[1] / len(self.row)
+        ))
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -125,6 +129,10 @@ def main(argv):
     rule = args.rule
     height = args.rows
     width = args.cols
+
+    if rule > 255:
+        print("Rule can't exceed 256.")
+        exit(1)
 
     col = [ 0 ] * width
 
