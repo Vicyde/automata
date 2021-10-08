@@ -1,8 +1,62 @@
 import sys
 import argparse
 import math
+import pygame 
+from pygame.locals import *
 
 from typing import Collection
+
+
+class GuiApp:
+    def __init__(self):
+        self.running = False
+        self.drawing_surface = None
+        self.size = (800, 600)
+        self.color_pixel = [255, 255, 255]
+        self.color_background = [0, 0, 0]
+        self.pixel_size = 10
+
+    def on_init(self):
+        pygame.init()
+        self.drawing_surface = pygame.display.set_mode(self.size, pygame.HWSURFACE)
+        self.running = True
+
+    def on_event(self, event):
+        if event.type == pygame.QUIT:
+            self.running = False
+
+    def on_draw(self):
+        self.drawing_surface.fill(self.color_background)
+
+        x = 0
+        y = 0
+
+        # Draw every row
+        for row in self.row:
+            for col in row:
+                pygame.draw.rect(self.drawing_surface, self.color_pixel if col == 1 else self.color_background, pygame.Rect(x, y, self.pixel_size, self.pixel_size))
+                x += self.pixel_size
+            y += self.pixel_size
+            x = 0
+            
+        pygame.display.flip()
+
+    def on_close(self):
+        pygame.quit()
+
+    def display(self, row):
+        self.row = row
+        if self.on_init() == False:
+            self.running = False
+        while(self.running):
+            for event in pygame.event.get():
+                self.on_event(event)
+
+            self.on_draw()
+            
+            # do something
+        self.on_close()
+
 
 def print_row(row, t="*", f="-"):
     """
@@ -70,7 +124,8 @@ def main(argv):
 
     # print
     if args.gui:
-        pass
+        window = GuiApp()
+        window.display(row)
     else:
         for n in row:
             print_row(n)
