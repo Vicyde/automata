@@ -1,4 +1,5 @@
 import sys
+import argparse
 
 def print_row(row, t="*", f="-"):
     """
@@ -42,17 +43,13 @@ def calculate_row(row, ruleset):
 
 
 def main(argv):
-    rule = 90
-    height = 80
+    parser = argparse.ArgumentParser(description="Shows an cellular automata.")
+    parser.add_argument('--rule', '-r', type=int, help="Rule to use", default=30)
+    parser.add_argument('--rows', type=int, help="Rows to show", default=80)
+    args = parser.parse_args()
 
-    if len(argv) > 1:
-        for arg in range(1, len(argv)):
-            if argv[arg] == '-r':
-                arg += 1
-                rule = int(argv[arg])
-            if argv[arg] == '-h':
-                arg += 1
-                height = int(argv[arg])
+    rule = args.rule
+    height = args.rows
 
     row = [ 0 ] * 64
     row[32] = 1
