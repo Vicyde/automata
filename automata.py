@@ -13,11 +13,15 @@ class GuiApp:
     def __init__(self):
         self.running = False
         self.drawing_surface = None
+        self.automata_surface = None
         self.size = (800, 600)
+        self.automata_size = ()
         self.color_pixel = [255, 255, 255]
         self.color_background = [0, 0, 0]
-        self.pixel_size = 0
+        self.pixel_size = 1
         self.row = []
+        self.dx = 0
+        self.dy = 0
 
     def set_title(self, title):
         pygame.display.set_caption(title)
@@ -25,6 +29,9 @@ class GuiApp:
     def on_init(self):
         pygame.init()
         self.drawing_surface = pygame.display.set_mode(self.size, pygame.HWSURFACE)
+
+        print("Automata Size: ", self.automata_size)
+        
         self.running = True
 
         self.pixel_size = math.floor(min(
@@ -41,31 +48,45 @@ class GuiApp:
                 self.pixel_size += 1
             elif event.key == pygame.K_KP_MINUS:
                 self.pixel_size -= 1 if self.pixel_size > 1 else 0
-               
+            elif event.key == pygame.K_DOWN:
+                self.dy += 5
+            elif event.key == pygame.K_UP:
+                self.dy += -5
+            elif event.key == pygame.K_RIGHT:
+                self.dx += 5
+            elif event.key == pygame.K_LEFT:
+                self.dx += -5
 
-    def on_draw(self):
-        self.drawing_surface.fill(self.color_background)
+
+    def create_automata_surface(self):
+        self.automata_size = (self.pixel_size * len(self.row[0]), self.pixel_size * len(self.row))
+        self.automata_surface = pygame.Surface(self.automata_size)
+        print(self.automata_size)
 
         x = 0
         y = 0
-
-        # Draw every row
         for row in self.row:
             for col in row:
-                pygame.draw.rect(self.drawing_surface, self.color_pixel if col == 1 else self.color_background, pygame.Rect(x, y, self.pixel_size, self.pixel_size))
+                pygame.draw.rect(self.automata_surface, self.color_pixel if col == 1 else self.color_background, pygame.Rect(x, y, self.pixel_size, self.pixel_size))   
                 x += self.pixel_size
             y += self.pixel_size
-            x = 0
+            x = 0         
+
+    def on_draw(self):
+        self.drawing_surface.fill(self.color_background)
+        self.drawing_surface.blit(self.automata_surface, (self.dx,self.dy))
             
-        pygame.display.flip()
+        pygame.display.update()
 
     def on_close(self):
         pygame.quit()
 
     def display(self, row):
-        self.row = row
+        self.row = row      
         if self.on_init() == False:
             self.running = False
+
+        self.create_automata_surface()
         while(self.running):
             for event in pygame.event.get():
                 self.on_event(event)
@@ -118,6 +139,7 @@ def calculate_row(row, ruleset):
 
 
 def main(argv):
+    print()
     parser = argparse.ArgumentParser(description="Shows an cellular automata.")
     parser.add_argument('--rule', type=int, help="Rule to use, using wolfram rulenumber", default=30)
     parser.add_argument('--rows', type=int, help="Amount of rows to print", default=80)
