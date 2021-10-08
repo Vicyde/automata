@@ -1,11 +1,11 @@
 import sys
 
-def print_row(row):
+def print_row(row, t="*", f="-"):
     """
     Prints a list to the standard output where a 1 is written as a *, everything else as -.
     """
     for x in row:
-        print("*" if x == 1 else "-", end='')
+        print(t if x == 1 else f, end='')
 
     print()
 
@@ -60,7 +60,7 @@ def main(argv):
     ruleset = generate_ruleset(rule)
 
     for n in range(height):
-        print_row(row)
+        print_row(row, t="#")
         row = calculate_row(row, ruleset)
 
 
