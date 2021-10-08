@@ -1,6 +1,9 @@
 import sys
 
 def print_row(row):
+    """
+    Prints a list to the standard output where a 1 is written as a *, everything else as -.
+    """
     for x in row:
         print("*" if x == 1 else "-", end='')
 
@@ -8,6 +11,9 @@ def print_row(row):
 
 
 def generate_ruleset(rule):
+    """
+    Generates a ruleset (a list of 8 rules) from a wolfram rule number.
+    """
     rule = "{:08b}".format(rule)  
     ruleset =  []
   
@@ -18,6 +24,9 @@ def generate_ruleset(rule):
 
 
 def calculate_row(row, ruleset):
+    """
+    Generates a new row based on the given row and ruleset.
+    """
     newrow = []
 
     for x in range(len(row)):
