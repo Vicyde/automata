@@ -26,7 +26,7 @@ class GuiApp:
         pygame.init()
         self.drawing_surface = pygame.display.set_mode(self.size, pygame.HWSURFACE)
         self.running = True
-        self.pixel_size = 5
+        self.pixel_size = 1
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
