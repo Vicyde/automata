@@ -1,5 +1,8 @@
 import sys
 import argparse
+import math
+
+from typing import Collection
 
 def print_row(row, t="*", f="-"):
     """
@@ -44,22 +47,33 @@ def calculate_row(row, ruleset):
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Shows an cellular automata.")
-    parser.add_argument('--rule', '-r', type=int, help="Rule to use", default=30)
+    parser.add_argument('--rule', type=int, help="Rule to use", default=30)
     parser.add_argument('--rows', type=int, help="Rows to show", default=80)
+    parser.add_argument('--cols', type=int, help="Width of the rows", default=64)
+    parser.add_argument('--gui', action='store_true')
     args = parser.parse_args()
 
     rule = args.rule
     height = args.rows
+    width = args.cols
 
-    row = [ 0 ] * 64
-    row[32] = 1
+    col = [ 0 ] * width
+    col[math.floor(width/2)] = 1
+    row = []
 
     ruleset = generate_ruleset(rule)
+    row.append(col)
 
-    print("Using rule %s:" % rule)
-    for n in range(height):
-        print_row(row, t="#")
-        row = calculate_row(row, ruleset)
+    print("Generating %i rows using rule %i." % (height, rule))
+    for n in range(1,height):
+        row.append(calculate_row(row[n-1], ruleset))
+
+    # print
+    if args.gui:
+        pass
+    else:
+        for n in row:
+            print_row(n)
 
 
 if __name__ == '__main__':
