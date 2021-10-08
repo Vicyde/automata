@@ -14,12 +14,17 @@ class GuiApp:
         self.size = (800, 600)
         self.color_pixel = [255, 255, 255]
         self.color_background = [0, 0, 0]
-        self.pixel_size = 10
+        self.pixel_size = 0
+        self.row = []
+
+    def set_title(self, title):
+        pygame.display.set_caption(title)
 
     def on_init(self):
         pygame.init()
         self.drawing_surface = pygame.display.set_mode(self.size, pygame.HWSURFACE)
         self.running = True
+        self.pixel_size = 5
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -125,6 +130,7 @@ def main(argv):
     # print
     if args.gui:
         window = GuiApp()
+        window.set_title("Showing rule %i" % rule)
         window.display(row)
     else:
         for n in row:
