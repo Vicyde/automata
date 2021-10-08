@@ -18,7 +18,7 @@ class GuiApp:
         self.automata_size = ()
         self.color_pixel = [255, 255, 255]
         self.color_background = [0, 0, 0]
-        self.pixel_size = 1
+        self.pixel_size = 0
         self.row = []
         self.dx = 0
         self.dy = 0
@@ -34,10 +34,11 @@ class GuiApp:
         
         self.running = True
 
-        self.pixel_size = math.floor(min(
-            self.size[0] / len(self.row[0]),
-            self.size[1] / len(self.row)
-        ))
+        if self.pixel_size == 0:
+            self.pixel_size = math.floor(min(
+                self.size[0] / len(self.row[0]),
+                self.size[1] / len(self.row)
+            ))
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -81,8 +82,10 @@ class GuiApp:
     def on_close(self):
         pygame.quit()
 
-    def display(self, row):
+    def display(self, row, pixel_size):
         self.row = row      
+        self.pixel_size = pixel_size
+
         if self.on_init() == False:
             self.running = False
 
@@ -140,11 +143,12 @@ def calculate_row(row, ruleset):
 
 def main(argv):
     print()
-    parser = argparse.ArgumentParser(description="Shows an cellular automata.")
+    parser = argparse.ArgumentParser(description="Shows a cellular automata.")
     parser.add_argument('--rule', type=int, help="Rule to use, using wolfram rulenumber", default=30)
     parser.add_argument('--rows', type=int, help="Amount of rows to print", default=80)
     parser.add_argument('--cols', type=int, help="The width of each row", default=64)
     parser.add_argument('--gui', action='store_true', help="Print using graphics")
+    parser.add_argument('--size', type=int, help="GUI only: Size of each pixel", default=0)
     parser.add_argument('--random', action='store_true', help="Starting row will be randomized")
     args = parser.parse_args()
 
@@ -177,7 +181,7 @@ def main(argv):
     if args.gui:
         window = GuiApp()
         window.set_title("Showing rule %i" % rule)
-        window.display(row)
+        window.display(row, args.size)
     else:
         for n in row:
             print_row(n)
